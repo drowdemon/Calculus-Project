@@ -30,6 +30,7 @@ public:
 int main()
 {
 	ifstream inf("elliptic_curves.txt");
+	ofstream outf("processed_Ecurves.txt");
 	string input;
 	vector<EllipticCurve> allCurves;
 	if(!inf)
@@ -150,12 +151,13 @@ int main()
 		}
 		E.geny=num;
 		i++; //skip colon
-		if(input[i]!=1)
+		if(input[i]!='1')
 			continue; //next curve
 		else
 		{
 			allCurves.push_back(E);
-			cout << "y^2 = x^3 + " << E.a2 << "x^2 + " << E.a4 << "x + " << E.a6 << endl;
+			outf << "[" << E.a2 << "," << E.a4 << "," << E.a6 << "] [" << E.genx << ":" << E.geny << "]\n";
+			//cout << "y^2 = x^3 + " << E.a2 << "x^2 + " << E.a4 << "x + " << E.a6 << endl;
 		}
 	}
 	cout << "Done" << endl;

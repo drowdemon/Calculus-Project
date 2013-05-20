@@ -1,0 +1,63 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[pdftex]{graphicx}
+\usepackage{alltt}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{comment}
+\newcommand{\degree}{\ensuremath{^\circ}}
+\newcommand{\n}{\break}
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+\begin{document}
+\raggedright
+Consider an elliptic curve, $E: y^2=x^3+Ax+B$.
+Given a point $p=(x,y)$, we will try to find $2p$, with the group law for elliptic curves.
+Differentiating $E$:
+\begin{align*}
+ 2y\frac{dy}{dx}=3x^2+A  \\
+   \frac{dy}{dx}=\frac{3x^2+A}{2y}
+\end{align*}
+Now, consider $x,y\in\mathbb{Q}$. That is, $x=x_1/x_2$ and $y=y_1/y_2$, with $x_1,y_1,x_2,y_2\in\mathbb{Z}$
+\begin{align*}
+ \frac{dy}{dx}&=\frac{\frac{3x_1^2}{x_2^2}+A}{\frac{2y_1}{y_2}} \\
+ \frac{dy}{dx}&=\left(\frac{3x_1^2}{x_2^2}+A\right)*\frac{y_2}{2y_1} \\
+ \frac{dy}{dx}&=\frac{3x_1^2y_2}{2x_2^2y_1}+\frac{Ay_2}{2y_1} \tag{1}
+\end{align*}\break
+\break
+Now, consider the equation of the line tangent to the elliptic curve at the same point, relabelled $p=(\alpha,\beta)$
+$$L:y=\frac{dy}{dx}(x-\alpha)+\beta$$
+$\alpha$ and $\beta$ are given by $p$, as are $x_1,x_2,x_3,x_4$.
+Plugging in to $E$, and thus finding intersection points:
+\begin{align*}
+ \left(\frac{dy}{dx}(x-\alpha)+\beta\right)^2&=x^3+Ax+B \\
+ \left(\frac{dy}{dx}(x-\alpha)\right)^2+2\beta\frac{dy}{dx}(x-\alpha)+\beta{^2}&=x^3+Ax+B \\
+ \left(\frac{dy}{dx}x-\frac{dy}{dx}\alpha\right)^2+2\beta\frac{dy}{dx}x-2\alpha\beta\frac{dy}{dx}+\beta{^2}&=x^3+Ax+B \\
+ \left(\frac{dy}{dx}\right)^2 x^2-2\left(\frac{dy}{dx}\right)^2\alpha x+\left(\frac{dy}{dx}\right)^2\alpha{^2} +2\beta\frac{dy}{dx}x-2\alpha\beta\frac{dy}{dx}+\beta{^2}&=x^3+Ax+B \\
+ 0=x^3-\left(\frac{dy}{dx}\right)^2 x^2+\left(A+2\alpha\left(\frac{dy}{dx}\right)^2-2\beta\frac{dy}{dx}\right)x+B-\left(\frac{dy}{dx}\right)^2\alpha{^2} &+2\alpha\beta\frac{dy}{dx}-\beta{^2} \\
+\end{align*}
+$\alpha$ is the point on the curve to which the line of tangency was drawn. It is therefore an intersection point between $E$ and $L$. In fact, since this is a point of tangency, it is a double solution. Thus, by synthetic division by $\alpha$, the equation can be simplified.
+\begin{center}
+  \begin{tabular} { c | c | c | c | c }
+  $\alpha$ & 1 & $-\left(\frac{dy}{dx}\right)^2$ & $A+2\alpha\left(\frac{dy}{dx}\right)^2-2\beta\frac{dy}{dx}$ & $B-\left(\frac{dy}{dx}\right)^2\alpha^2+2\alpha\beta\frac{dy}{dx}-\beta^2$ \\
+  & 0 & $\alpha$ & $\alpha^2-\alpha\left(\frac{dy}{dx}\right)^2$ & $A\alpha+\alpha^2\left(\frac{dy}{dx}\right)^2-2\alpha\beta\frac{dy}{dx}+\alpha^3$ \\
+  \hline
+  & 1 & $\alpha-\left(\frac{dy}{dx}\right)^2$ & $A+\alpha\left(\frac{dy}{dx}\right)^2-2\beta\frac{dy}{dx}+\alpha^2$ & $A\alpha+\alpha^3+B-\beta^2$\\
+  \end{tabular}
+  \break
+\end{center}
+There appears to be a snag, in that the remainder is not zero. However, $\alpha$ is, by construction, a double solution. For all rational points on the given elliptic curve this remainder will be $0$. Thus, we have a simplified equation for the intersection points of the line with the elliptic curve:
+$$x^2+\left(\alpha-\left(\frac{dy}{dx}\right)^2\right)x+A+\alpha\left(\frac{dy}{dx}\right)^2-2\beta\frac{dy}{dx}+\alpha^2=0$$
+Now, we can preform synthetic division again, by the same point, and get an even simpler equation.
+\begin{center}
+  \begin{tabular} { c | c | c | c }
+  $\alpha$ & 1 & $\alpha-\left(\frac{dy}{dx}\right)^2$ & $A+\alpha\left(\frac{dy}{dx}\right)^2-2\beta\frac{dy}{dx}+\alpha^2$ \\ 
+  & 0 & $\alpha$ & $2\alpha^2-\alpha\left(\frac{dy}{dx}\right)^2$ \\
+  \hline
+  & 1 & $2\alpha-\left(\frac{dy}{dx}\right)^2$ & $A+3\alpha^2-2\beta\frac{dy}{dx}$ \\
+  \end{tabular}
+  \break
+\end{center}
+Once again, despite the appearance of a remainder, this remainder is always $0$.
+Thus, the final solution is:
+$$x=\left(\frac{dy}{dx}\right)^2-2\alpha$$
+\end{document}

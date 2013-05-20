@@ -3,3 +3,7 @@ Debug/
 .project
 .cproject
 .gitignore~
+*.aux
+*.pdf
+*.synctex.gz
+*.log

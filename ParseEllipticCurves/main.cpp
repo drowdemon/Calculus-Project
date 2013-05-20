@@ -68,6 +68,8 @@ int main()
 		while(input[i]!=',')
 			i++;
 		//now at comma
+		if(E.a2!=0) //Only curves with no x^2 term
+			continue; //next curve
 
 		i++; //get to the actual number
 		if(input[i]!='0') //we want it to be 0

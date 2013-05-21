@@ -24,6 +24,7 @@ Now, consider $x,y\in\mathbb{Q}$. That is, $x=x_1/x_2$ and $y=y_1/y_2$, with $x_
  \frac{dy}{dx}&=\frac{3x_1^2y_2}{2x_2^2y_1}+\frac{Ay_2}{2y_1} \tag{1}
 \end{align*}\break
 \break
+The equation for the derivative is written as $(1)$ because it is more convenient for programming. The earlier version is just as correct and usable mathematically.\break\break
 Now, consider the equation of the line tangent to the elliptic curve at the same point, relabelled $p=(\alpha,\beta)$
 $$L:y=\frac{dy}{dx}(x-\alpha)+\beta$$
 $\alpha$ and $\beta$ are given by $p$, as are $x_1,x_2,x_3,x_4$.
@@ -46,7 +47,9 @@ $\alpha$ is the point on the curve to which the line of tangency was drawn. It i
   \break
 \end{center}
 There appears to be a snag, in that the remainder is not zero. However, $\alpha$ is, by construction, a double solution. For all rational points on the given elliptic curve this remainder will be $0$. Thus, we have a simplified equation for the intersection points of the line with the elliptic curve:
-$$x^2+\left(\alpha-\left(\frac{dy}{dx}\right)^2\right)x+A+\alpha\left(\frac{dy}{dx}\right)^2-2\beta\frac{dy}{dx}+\alpha^2=0$$
+\begin{align}
+x^2+\left(\alpha-\left(\frac{dy}{dx}\right)^2\right)x+A+\alpha\left(\frac{dy}{dx}\right)^2-2\beta\frac{dy}{dx}+\alpha{^2}=0 \tag{2}
+\end{align}
 Now, we can preform synthetic division again, by the same point, and get an even simpler equation.
 \begin{center}
   \begin{tabular} { c | c | c | c }
@@ -59,5 +62,37 @@ Now, we can preform synthetic division again, by the same point, and get an even
 \end{center}
 Once again, despite the appearance of a remainder, this remainder is always $0$.
 Thus, the final solution is:
-$$x=\left(\frac{dy}{dx}\right)^2-2\alpha$$
+\begin{align}
+x=\left(\frac{dy}{dx}\right)^2-2\alpha \tag{3}
+\end{align}
+Plugging in for $y$, 
+\begin{align*}
+y=\frac{dy}{dx}\left(\left(\frac{dy}{dx}\right)^2-2\alpha\right)+\beta
+\end{align*}
+However, addition of points on an elliptic curves requires the reflection of this point about the line of symmetry of the curve parallel to the x-axis. Since $E$ can be written as $y=\pm\sqrt{x^3+Ax+B}$, the line of symmetry is always the x-axis. Thus,
+\begin{align*}
+y=-\frac{dy}{dx}\left(\left(\frac{dy}{dx}\right)^2-2\alpha\right)+\beta
+\end{align*}
+\break
+Now, consider the case where two points, $p_1=(\alpha_1,\beta_1),\; p_2=(\alpha_2,\beta_2)$, are being added. That is, a line is drawn through both points, and the sum is the third point of intersection between the line and the curve.
+The slope of the line is $m=\dfrac{\beta_2-\beta_1}{\alpha_2-\alpha_1}$. Now, replacing $\dfrac{dy}{dx}$ with $m$, $\alpha$ with $\alpha_1$, and $\beta$ with $\beta_1$, the process for finding the point of intersection is identical to the previous one, up until $(2)$. From there, we divide not by $\alpha_1$, but by $\alpha_2$, as this is the second point of intersection.
+\begin{center}
+  \begin{tabular} { c | c | c | c }
+  $\alpha_2$ & 1 & $\alpha_1-m^2$ & $A+\alpha_1 m^2-2\beta_1 m+\alpha_1^2$ \\ 
+  & 0 & $\alpha_2$ & $\alpha_1\alpha_2-\alpha_2 m^2+\alpha_2^2$ \\
+  \hline
+  & 1 & $\alpha_1+\alpha_2-m^2$ & $A+\alpha_1 m^2-2\beta_1 m + \alpha_1^2+\alpha_1\alpha_2-\alpha_2 m^2+\alpha_2^2$ \\
+  \end{tabular}
+  \break
+\end{center}
+Once more, the remainder is always zero. So we are left with
+\begin{align*}
+x+\alpha_1 + \alpha_2 -m^2=0 \\
+x=m^2-\alpha_1 - \alpha_2 \tag{4}\\ 
+\end{align*}
+Note that, in essence, $(4)$ and $(3)$ look identical.
+Now, reflecting as previously,
+\begin{align*}
+y=-m(m^2-\alpha_1-\alpha_2)+\beta_1
+\end{align*}
 \end{document}

@@ -120,8 +120,8 @@ EllipticCurve init()
 		allCurves.push_back("");
 		getline(inf,allCurves[allCurves.size()-1]);
 	}
-	//int rnd=rand()%allCurves.size();
-	int rnd=58;
+	int rnd=rand()%allCurves.size();
+	//int rnd=58;
 	EllipticCurve E;
 
 	int i=1;

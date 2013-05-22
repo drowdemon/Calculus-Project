@@ -7,3 +7,5 @@ Debug/
 *.pdf
 *.synctex.gz
 *.log
+#My own stuff
+PointGenerator/GoalPointCopy.txt

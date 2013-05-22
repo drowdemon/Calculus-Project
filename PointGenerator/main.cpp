@@ -12,6 +12,8 @@ class Point;
 EllipticCurve init();
 Point addToSelf(EllipticCurve E, Point gen);
 Point add(EllipticCurve E, Point gen1, Point gen2);
+#define MINLENGTH 10
+#define MAXLENGTH 15
 
 class Point
 {
@@ -57,28 +59,56 @@ int main()
 	srand(time(NULL));
 	EllipticCurve E=init();
 	cout << E.a2 << " " << E.a4 << " " << E.a6 << " " << E.genx << " " << E.geny << endl;
-	Point p;
-	mpq_set_si(p.x,E.genx,1);
-	mpq_set_si(p.y,E.geny,1);
-	Point p2=addToSelf(E,p);
-	mpq_out_str(NULL,10,p2.x);
+	vector<Point> allpoints(1);
+	mpq_set_si(allpoints[0].x,E.genx,1);
+	mpq_set_si(allpoints[0].y,E.geny,1);
+	allpoints.push_back(addToSelf(E,allpoints[0])); //now contains p and 2p. size=2
+	int length=(rand()%(MAXLENGTH-MINLENGTH))+MINLENGTH;
+	for(int i=0; i<length; i++) //each iteration is another step added to the path
+	{
+		bool addtowhat=(rand()%5)==4 ? true : false; // true=addtoself, false=pick 2 points
+		if(addtowhat)
+		{
+			allpoints.push_back(addToSelf(E,allpoints[allpoints.size()-1])); //add on 2*endpt
+		}
+		else
+		{
+			int whichpt=rand()%(allpoints.size()-1); //the last one in the index is the current one, would be 2p, so exclude it
+			allpoints.push_back(add(E,allpoints[allpoints.size()-1],allpoints[whichpt]));
+		}
+	}
+	/*printf("X: ");
+	mpq_out_str(NULL,10,allpoints[allpoints.size()-1].x);
+	printf("\nY: ");
+	mpq_out_str(NULL,10,allpoints[allpoints.size()-1].y);
+	printf("\n");*///155495
+	FILE *f;
+	f=fopen("GoalPoint.txt", "w");
+	mpq_out_str(f,10,allpoints[allpoints.size()-1].x);
+	fprintf(f,"\n");
+	mpq_out_str(f,10,allpoints[allpoints.size()-1].y);
+	fclose(f);
+	printf("Done");
+	//mpq_out_str(outf,10,allpoints[allpoints.size()-1].x);
+	//Point p2=addToSelf(E,p);
+	/*mpq_out_str(NULL,10,p2.x);
 	printf(" ");
 	mpq_out_str(NULL,10,p2.y);
-	printf("\n");
+	printf("\n");*/
 
-	mpq_out_str(NULL,10,p.x);
+
+	//Point p3=add(E,p,p2);
+	/*mpq_out_str(NULL,10,p3.x);
 	printf(" ");
-	mpq_out_str(NULL,10,p.y);
-	printf("\n");
+	mpq_out_str(NULL,10,p3.y);*/
 
-	Point p3=add(E,p,p2);
-	mpq_out_str(NULL,10,p3.x);
-	printf(" ");
-	mpq_out_str(NULL,10,p3.y);
-
-	p.Destroy();
+	/*p.Destroy();
 	p2.Destroy();
-	p3.Destroy();
+	p3.Destroy();*/
+	for(unsigned int i=0; i<allpoints.size(); i++)
+	{
+		allpoints[i].Destroy();
+	}
 }
 
 EllipticCurve init()
@@ -255,8 +285,6 @@ Point add(EllipticCurve E, Point gen1, Point gen2) // returns gen1+gen2
 	//mpq_out_str(NULL,10,slope);
 	//printf("\n");
 	mpq_div(slope,slope,p1); //slope=slope/p1, proper slope
-	mpq_out_str(NULL,10,slope);
-	printf("\n");
 	//mpq_clear(p1);
 	//slope is now correct //Re-using variables because allocation is slow.
 	mpq_set(p1,slope); //sets p1=slope

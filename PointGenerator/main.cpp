@@ -8,7 +8,10 @@
 using namespace std;
 
 class EllipticCurve;
+class Point;
 EllipticCurve init();
+Point addToSelf(EllipticCurve E, Point gen);
+Point add(EllipticCurve E, Point gen1, Point gen2);
 
 class Point
 {
@@ -20,7 +23,7 @@ public:
 		mpq_init(x);
 		mpq_init(y);
 	}
-	~Point()
+	void Destroy()
 	{
 		mpq_clear(x);
 		mpq_clear(y);
@@ -54,6 +57,28 @@ int main()
 	srand(time(NULL));
 	EllipticCurve E=init();
 	cout << E.a2 << " " << E.a4 << " " << E.a6 << " " << E.genx << " " << E.geny << endl;
+	Point p;
+	mpq_set_si(p.x,E.genx,1);
+	mpq_set_si(p.y,E.geny,1);
+	Point p2=addToSelf(E,p);
+	mpq_out_str(NULL,10,p2.x);
+	printf(" ");
+	mpq_out_str(NULL,10,p2.y);
+	printf("\n");
+
+	mpq_out_str(NULL,10,p.x);
+	printf(" ");
+	mpq_out_str(NULL,10,p.y);
+	printf("\n");
+
+	Point p3=add(E,p,p2);
+	mpq_out_str(NULL,10,p3.x);
+	printf(" ");
+	mpq_out_str(NULL,10,p3.y);
+
+	p.Destroy();
+	p2.Destroy();
+	p3.Destroy();
 }
 
 EllipticCurve init()
@@ -65,7 +90,8 @@ EllipticCurve init()
 		allCurves.push_back("");
 		getline(inf,allCurves[allCurves.size()-1]);
 	}
-	int rnd=rand()%allCurves.size();
+	//int rnd=rand()%allCurves.size();
+	int rnd=58;
 	EllipticCurve E;
 
 	int i=1;
@@ -168,18 +194,19 @@ Point addToSelf(EllipticCurve E, Point gen) // returns 2p.
 	mpz_mul_si(mpq_numref(p1),mpq_numref(gen.x),3); //3x_1
 	mpz_mul(mpq_numref(p1),mpq_numref(p1),mpq_numref(gen.x)); //3x_1^2
 	mpz_mul(mpq_numref(p1),mpq_numref(p1),mpq_denref(gen.y)); //3x_1^2y_2 == ans*y2 == ans * denominator of y
-
 	mpz_mul(mpq_denref(p1),mpq_numref(gen.y),mpq_denref(gen.x)); //x_2y_1
 	mpz_mul_si(mpq_denref(p1),mpq_denref(p1),2); //2*x_2y_1
 
 	mpq_canonicalize(p1); //first fraction complete
 
-	mpz_mul_si(mpq_numref(p1),mpq_denref(gen.y),E.a4); //Ay_2
-	mpz_mul_si(mpq_denref(p1),mpq_numref(gen.y),2); //2y_1
+	mpz_mul_si(mpq_numref(p2),mpq_denref(gen.y),E.a4); //Ay_2
+	mpz_mul_si(mpq_denref(p2),mpq_numref(gen.y),2); //2y_1
 
 	mpq_canonicalize(p2); //second fraction complete
 
 	mpq_add(slope,p1,p2); //add
+	/*mpq_out_str(NULL,10,slope);
+	printf("\n");*/
 	//mpq_clear(p1);
 	//mpq_clear(p2);
 	//slope is now correct //Re-using variables because allocation is slow.
@@ -212,10 +239,24 @@ Point add(EllipticCurve E, Point gen1, Point gen2) // returns gen1+gen2
 	mpq_init(slope);
 	mpq_t p1;
 	mpq_init(p1);
+	/*mpq_out_str(NULL,10,gen1.x);
+	printf(" ");
+	mpq_out_str(NULL,10,gen1.y);
+	printf("\n");
+	mpq_out_str(NULL,10,gen2.x);
+	printf(" ");
+	mpq_out_str(NULL,10,gen2.y);
+	printf("\n");*/
 
 	mpq_sub(slope,gen2.y,gen1.y); //numerator of slope: slope=y2-y1
+	//mpq_out_str(NULL,10,slope);
+	//printf("\n");
 	mpq_sub(p1,gen2.x,gen1.x); //denominator of slope: p1=x2-x1
+	//mpq_out_str(NULL,10,slope);
+	//printf("\n");
 	mpq_div(slope,slope,p1); //slope=slope/p1, proper slope
+	mpq_out_str(NULL,10,slope);
+	printf("\n");
 	//mpq_clear(p1);
 	//slope is now correct //Re-using variables because allocation is slow.
 	mpq_set(p1,slope); //sets p1=slope
